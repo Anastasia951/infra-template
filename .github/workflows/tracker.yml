@@ -2,7 +2,7 @@ name: Release
 run-name: Push in tracker
 on:
   push:
-    tags:
+    tags-ignore:
       - rc-0.0.*
 jobs:
   release:
