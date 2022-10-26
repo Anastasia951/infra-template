@@ -44,7 +44,8 @@ export async function updateTicket() {
   }
 }
 async function getCommitsBetweenTags(currentTag) {
-  const gitLogCommand = `git log --pretty="format:%an - %H" ${currentTag === 1 ? "...rc-0.0.1" : `rc-0.0.${currentTag - 1}...rc-0.0.${currentTag}`}`
+  const gitLogCommand = `git log ${currentTag === 1 ? "...rc-0.0.1" : `rc-0.0.${currentTag - 1}..rc-0.0.${currentTag}`} --pretty="format:%an - %H"`
+  console.log(gitLogCommand)
   const { stdout: logs } = await execPromised(gitLogCommand)
 
   return logs
@@ -53,14 +54,13 @@ async function createComment(currentTag) {
   const pathCommentsURL = `https://api.tracker.yandex.net/v2/issues/${TICKET_ID}/comments`
   try {
     const text = await getCommitsBetweenTags(currentTag)
-    const result = await fetch(pathCommentsURL, {
+    await fetch(pathCommentsURL, {
       method: 'POST',
       headers,
       body: JSON.stringify({
         text,
       })
     })
-    console.log('RESULT', result)
     console.log("Комментарий успешно создан")
   } catch (e) {
     console.log(e.message)
