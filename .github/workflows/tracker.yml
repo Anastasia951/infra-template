@@ -16,6 +16,10 @@ jobs:
           node-version: 16
       - name: install dependencies
         run: npm ci
+      - name: eslint check
+        run: npm run lint
+      - name: ts check
+        run: npm run ts
       - name: update ticket
         env:
           OAUTH_TOKEN: ${{secrets.OAUTH_TOKEN}}
