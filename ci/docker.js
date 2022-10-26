@@ -18,7 +18,7 @@ async function createComment() {
     const tag = github.context.ref
     const version = tag.match(regexp)[0]
 
-    await execPromised(`docker build -t docker-image:${version}`)
+    await execPromised(`docker build -t image:${version} .`)
 
     const pathCommentsURL = `https://api.tracker.yandex.net/v2/issues/${TICKET_ID}/comments`
     await fetch(pathCommentsURL, {
