@@ -13,22 +13,28 @@ const patchTicketURL = `https://api.tracker.yandex.net/v2/issues/${TICKET_ID}`
 
 function formatTodayDate() {
   const today = new Date()
-  return new Intl.DateTimeFormat('en-US').format(today)
+  return new Intl.DateTimeFormat('ru-RU').format(today)
 }
 
 export async function updateTicket() {
   const regexp = /rc-0.0.\d+$/
   const tag = github.context.ref
+  const author = github.context.actor
   const version = tag.match(regexp)[0]
-  const result = await fetch(patchTicketURL, {
-    method: 'PATCH',
-    headers,
-    body: JSON.stringify({
-      summary: `Релиз ${version} - ${formatTodayDate()}`
-    })
-  })
 
-  console.log(result)
+  try {
+    await fetch(patchTicketURL, {
+      method: 'PATCH',
+      headers,
+      body: JSON.stringify({
+        summary: `Релиз ${version} - ${formatTodayDate()}`,
+        description: `Ответственный за релиз ${author}`
+      })
+    })
+    console.log("Тикет успешно создан")
+  } catch (e) {
+    console.log("Ошибка при создании тикета")
+  }
 }
 
 updateTicket()
