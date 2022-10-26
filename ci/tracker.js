@@ -24,7 +24,7 @@ export async function updateTicket() {
   const tag = github.context.ref
   const author = github.context.actor
   const version = tag.match(regexp)[0]
-  const maintenance = tag.match(regexp)[1]
+  const maintenance = version.split('.').pop()
 
   try {
     await fetch(patchTicketURL, {
@@ -38,8 +38,6 @@ export async function updateTicket() {
     console.log("Тикет успешно создан")
 
     await createComment(maintenance)
-    console.log("Комментарий успешно создан")
-
   } catch (e) {
     console.log("Ошибка при создании тикета")
   }
@@ -66,4 +64,5 @@ async function createComment(currentTag) {
     console.log("Ошибка при создании комментария")
   }
 }
-updateTicket()
+// updateTicket()
+console.log(updateTicket())
