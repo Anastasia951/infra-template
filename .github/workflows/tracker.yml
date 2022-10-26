@@ -22,3 +22,9 @@ jobs:
           TICKET_ID: ${{secrets.TICKET_ID}}
           X_ORG_ID: ${{secrets.X_ORG_ID}}
         run: npm run tracker
+      - name: docker
+        env:
+          OAUTH_TOKEN: ${{secrets.OAUTH_TOKEN}}
+          TICKET_ID: ${{secrets.TICKET_ID}}
+          X_ORG_ID: ${{secrets.X_ORG_ID}}
+        run: npm run docker

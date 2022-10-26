@@ -18,7 +18,7 @@ function formatTodayDate() {
   return new Intl.DateTimeFormat('ru-RU').format(today)
 }
 
-export async function updateTicket() {
+export async function createTicket() {
   const patchTicketURL = `https://api.tracker.yandex.net/v2/issues/${TICKET_ID}`
   const regexp = /rc-0.0.\d+$/
   const tag = github.context.ref
@@ -37,8 +37,6 @@ export async function updateTicket() {
       })
     })
     console.log("Тикет успешно создан")
-
-    await createComment(version)
   } catch (e) {
     console.log("Ошибка при создании тикета")
   }
@@ -52,25 +50,9 @@ async function getCommitsBetweenTags(currentTag) {
 async function getDescription(currentTag) {
   try {
     const description = await getCommitsBetweenTags(currentTag)
-    console.log(description)
     return description
   } catch (e) {
     console.log(e.message)
   }
 }
-async function createComment(currentTag) {
-  const pathCommentsURL = `https://api.tracker.yandex.net/v2/issues/${TICKET_ID}/comments`
-  try {
-    await fetch(pathCommentsURL, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({
-        text: `Собрали образ с тегом ${currentTag}`,
-      })
-    })
-
-  } catch (e) {
-    console.log(e.message)
-  }
-}
-updateTicket()
+createTicket()
