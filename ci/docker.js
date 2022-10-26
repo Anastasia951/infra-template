@@ -19,8 +19,11 @@ async function createComment() {
     const version = tag.match(regexp)[0]
 
     await execPromised(`docker build -t image:${version} .`)
-
+    console.log('Создание образа докера')
     const pathCommentsURL = `https://api.tracker.yandex.net/v2/issues/${TICKET_ID}/comments`
+
+    console.log('Начало отправки запроса на создание комментария')
+
     await fetch(pathCommentsURL, {
       method: 'POST',
       headers,
@@ -29,8 +32,10 @@ async function createComment() {
       })
     })
 
+    console.log('Комментарий успешно создан')
+
   } catch (e) {
-    console.log(e.message)
+    console.error("Ошибка при создании комментария", e.message)
   }
 }
 
