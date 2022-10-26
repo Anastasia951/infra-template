@@ -44,7 +44,7 @@ export async function updateTicket() {
   }
 }
 async function getCommitsBetweenTags(currentTag) {
-  const gitLogCommand = `git log --pretty="%an-%H" ${currentTag === 1 ? "...rc-0.0.1" : `rc-0.0.${currentTag - 1}..rc-0.0.${currentTag}`}`
+  const gitLogCommand = `git log --pretty="%an-%H" ${currentTag === 1 ? "rc-0.0.1" : `rc-0.0.${currentTag - 1}...rc-0.0.${currentTag}`}`
   console.log(gitLogCommand)
   const { stdout: logs } = await execPromised(gitLogCommand)
 
@@ -68,4 +68,5 @@ async function createComment(currentTag) {
     console.log("Ошибка при создании комментария")
   }
 }
-console.log(await getCommitsBetweenTags(5))
+
+updateTicket()
