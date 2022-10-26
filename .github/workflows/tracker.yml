@@ -16,7 +16,7 @@ jobs:
         run: npm ci
       - name: update ticket
         env:
-          OUATH_TOKEN: ${{secrets.OAUTH_TOKEN}}
+          OAUTH_TOKEN: ${{secrets.OAUTH_TOKEN}}
           TICKET_ID: ${{secrets.TICKET_ID}}
           X_ORG_ID: ${{secrets.X_ORG_ID}}
         run: npm run tracker
