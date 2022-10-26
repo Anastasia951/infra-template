@@ -10,3 +10,5 @@ export async function updateTicket() {
   const { maintenance } = tag.match(regexp)
   core.info(maintenance)
 }
+
+updateTicket()
