@@ -1,9 +1,6 @@
 name: Tracker Actions
 run-name: Check Files
-on:
-  push:
-    tags-ignore:
-      - rc-0.0.*
+on: [push]
 jobs:
   ts-eslint-check:
     runs-on: ubuntu-latest
