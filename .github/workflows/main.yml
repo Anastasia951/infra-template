@@ -2,6 +2,8 @@ name: Tracker Actions
 run-name: Check Files
 on:
   push:
+    branches:
+      - '**'
     tags-ignore:
       - rc-0.0.*
 jobs:
