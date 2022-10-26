@@ -25,7 +25,7 @@ export async function updateTicket() {
   const author = github.context.actor
   const version = tag.match(regexp)[0]
   const maintenance = version.split('.').pop()
-  console.log(maintenance)
+  const description = await getDescription()
 
   try {
     await fetch(patchTicketURL, {
@@ -33,40 +33,43 @@ export async function updateTicket() {
       headers,
       body: JSON.stringify({
         summary: `Релиз ${version} - ${formatTodayDate()}`,
-        description: `Ответственный за релиз ${author}`
+        description: `Ответственный за релиз ${author} \n \n ${description}`
       })
     })
     console.log("Тикет успешно создан")
 
-    await createComment(maintenance)
+    await createComment(version)
   } catch (e) {
     console.log("Ошибка при создании тикета")
   }
 }
 async function getCommitsBetweenTags(currentTag) {
   const gitLogCommand = `git log --pretty="%cn - %H" ${currentTag === 1 ? "rc-0.0.1" : `rc-0.0.${currentTag - 1}...rc-0.0.${currentTag}`}`
-  console.log(gitLogCommand)
   const { stdout: logs } = await execPromised(gitLogCommand)
 
   return logs
 }
+async function getDescription(currentTag) {
+  try {
+    const description = await getCommitsBetweenTags(currentTag)
+    return description
+  } catch (e) {
+    console.log(e.message)
+  }
+}
 async function createComment(currentTag) {
   const pathCommentsURL = `https://api.tracker.yandex.net/v2/issues/${TICKET_ID}/comments`
   try {
-    const text = await getCommitsBetweenTags(currentTag)
-    const result = await fetch(pathCommentsURL, {
+    await fetch(pathCommentsURL, {
       method: 'POST',
       headers,
       body: JSON.stringify({
-        text,
+        text: `Собрали образ с тегом ${currentTag}`,
       })
     })
-    console.log('RESULT', result)
-    console.log("Комментарий успешно создан")
+
   } catch (e) {
     console.log(e.message)
-    console.log("Ошибка при создании комментария")
   }
 }
-
 updateTicket()
