@@ -25,7 +25,7 @@ export async function updateTicket() {
   const author = github.context.actor
   const version = tag.match(regexp)[0]
   const maintenance = version.split('.').pop()
-  const description = await getDescription()
+  const description = await getDescription(maintenance)
 
   try {
     await fetch(patchTicketURL, {
@@ -33,7 +33,7 @@ export async function updateTicket() {
       headers,
       body: JSON.stringify({
         summary: `Релиз ${version} - ${formatTodayDate()}`,
-        description: `Ответственный за релиз ${author} \n \n ${description}`
+        description: `Ответственный за релиз ${author} \n\n\n ${description}`
       })
     })
     console.log("Тикет успешно создан")
@@ -52,6 +52,7 @@ async function getCommitsBetweenTags(currentTag) {
 async function getDescription(currentTag) {
   try {
     const description = await getCommitsBetweenTags(currentTag)
+    console.log(description)
     return description
   } catch (e) {
     console.log(e.message)
