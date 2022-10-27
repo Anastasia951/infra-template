@@ -42,7 +42,7 @@ export async function createTicket() {
   }
 }
 async function getCommitsBetweenTags(currentTag) {
-  const gitLogCommand = `git log --pretty="%cn - %H" ${currentTag === 1 ? "rc-0.0.1" : `rc-0.0.${currentTag - 1}...rc-0.0.${currentTag}`}`
+  const gitLogCommand = `git log --pretty="%cn - %H" ${currentTag === "1" ? "rc-0.0.1" : `rc-0.0.${currentTag - 1}...rc-0.0.${currentTag}`}`
   console.log('Получение коммитов')
   const { stdout: logs } = await execPromised(gitLogCommand)
 
