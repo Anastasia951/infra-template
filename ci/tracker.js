@@ -3,7 +3,6 @@ import { exec } from 'child_process'
 import { promisify } from 'util';
 import fetch from 'node-fetch'
 
-
 const execPromised = promisify(exec)
 const { OAUTH_TOKEN, TICKET_ID, X_ORG_ID } = process.env
 
